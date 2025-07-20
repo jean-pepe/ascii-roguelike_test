@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASCII Roguelike</title>
+  <style>
+    body {
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+      font-size: 20px;
+      text-align: center;
+    }
+    pre {
+      user-select: none;
+    }
+    .buttons {
+      margin-top: 10px;
+    }
+    button {
+      font-size: 20px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ASCII Roguelike</h1>
+  <pre id="game"></pre>
+  <div class="buttons">
+    <button onclick="move(0, -1)">⬆️</button><br/>
+    <button onclick="move(-1, 0)">⬅️</button>
+    <button onclick="move(1, 0)">➡️</button><br/>
+    <button onclick="move(0, 1)">⬇️</button>
+  </div>
+  <script>
+    const width = 20, height = 10;
+    const map = Array(height).fill().map(() => Array(width).fill('.'));
+    let player = { x: 10, y: 5 };
+
+    function render() {
+      const output = map.map((row, y) =>
+        row.map((cell, x) => (x === player.x && y === player.y) ? '@' : cell).join('')
+      ).join('\n');
+      document.getElementById('game').textContent = output;
+    }
+
+    function move(dx, dy) {
+      const newX = player.x + dx;
+      const newY = player.y + dy;
+      if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+        player.x = newX;
+        player.y = newY;
+        render();
+      }
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowUp" || e.key === "w") move(0, -1);
+      if (e.key === "ArrowDown" || e.key === "s") move(0, 1);
+      if (e.key === "ArrowLeft" || e.key === "a") move(-1, 0);
+      if (e.key === "ArrowRight" || e.key === "d") move(1, 0);
+    });
+
+    render();
+  </script>
+</body>
+</html>
